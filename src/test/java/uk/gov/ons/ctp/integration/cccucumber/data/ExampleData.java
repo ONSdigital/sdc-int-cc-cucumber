@@ -10,21 +10,22 @@ import uk.gov.ons.ctp.common.event.model.CollectionExerciseMetadata;
 import uk.gov.ons.ctp.common.event.model.SurveyUpdate;
 
 public class ExampleData {
+  public static final String DEFAULT_SURVEY_ID = "0ef602b6-35b0-11ec-b2f0-4c3275913db5";
+  public static final String DEFAULT_COLLEX_ID = "1f1e7466-35b0-11ec-b103-4c3275913db5";
   public static final String DEFAULT_CASE_ID = "c45de4dc-3c3b-11e9-b210-d663bd873d13";
   public static final String VALID_MOBILE_NO = "07700 900345";
-  public static final String INVALID_MOBILE_NO = "1234567";
 
   // --- model fixtures below ...
 
   public static CaseUpdateSample createSample() {
     CaseUpdateSample sample = new CaseUpdateSample();
-    sample.setAddressLine1("England House");
-    sample.setAddressLine2("England Street");
-    sample.setAddressLine3("Smithfield");
+    sample.setAddressLine1("6B Okehampton Road");
+    sample.setAddressLine2("");
+    sample.setAddressLine3("");
     sample.setTownName("Exeter");
-    sample.setPostcode("EX1 2TD");
+    sample.setPostcode("EX4 1EH");
     sample.setRegion("E");
-    sample.setUprn("10023122451");
+    sample.setUprn("100040226402");
     return sample;
   }
 
@@ -47,12 +48,15 @@ public class ExampleData {
       CaseUpdateSample sample, CaseUpdateSampleSensitive sampleSensitive, String id) {
     CaseUpdate cc = new CaseUpdate();
     cc.setCaseId(id);
-    cc.setRefusalReceived("CENSUS");
-    cc.setCollectionExerciseId("4a6c6e0a-6384-4da8-8c3c-7c56a801f792");
+    cc.setSurveyId(DEFAULT_SURVEY_ID);
+    cc.setCollectionExerciseId(DEFAULT_COLLEX_ID);
+    cc.setCaseRef("10000000017");
+    cc.setRefusalReceived(null);
     cc.setInvalid(false);
     cc.setSample(sample);
     cc.setSampleSensitive(sampleSensitive);
-    cc.setSurveyId("4a6c6e0a-6384-4da8-8c3c-7c56a801f792");
+    cc.setCreatedAt(new Date());
+    cc.setLastUpdatedAt(new Date());
     return cc;
   }
 
@@ -64,8 +68,8 @@ public class ExampleData {
 
   public static SurveyUpdate createSurveyUpdate() {
     SurveyUpdate surveyUpdate = new SurveyUpdate();
-    surveyUpdate.setSurveyId("4a6c6e0a-6384-4da8-8c3c-7c56a801f792");
-    surveyUpdate.setName("LMS");
+    surveyUpdate.setSurveyId(DEFAULT_SURVEY_ID);
+    surveyUpdate.setName("CCC");
     surveyUpdate.setSampleDefinitionUrl("test/social.json");
     surveyUpdate.setSampleDefinition(
         "[\n"
@@ -87,11 +91,11 @@ public class ExampleData {
 
   public static CollectionExercise createCollectionExercise() {
     CollectionExercise collectionExercise = new CollectionExercise();
-    collectionExercise.setSurveyId("4a6c6e0a-6384-4da8-8c3c-7c56a801f792");
-    collectionExercise.setCollectionExerciseId("4a6c6e0a-6384-4da8-8c3c-7c56a801f792");
-    collectionExercise.setName("Dummy");
+    collectionExercise.setSurveyId(DEFAULT_SURVEY_ID);
+    collectionExercise.setCollectionExerciseId(DEFAULT_COLLEX_ID);
+    collectionExercise.setName("CCcuc");
     collectionExercise.setStartDate(Date.from(Instant.parse("2021-09-17T23:59:59.999Z")));
-    collectionExercise.setEndDate(Date.from(Instant.parse("2021-09-27T23:59:59.999Z")));
+    collectionExercise.setEndDate(Date.from(Instant.parse("2023-09-27T23:59:59.999Z")));
     collectionExercise.setReference("MVP012021");
     collectionExercise.setMetadata(createCollectionExerciseMetaData());
     return collectionExercise;

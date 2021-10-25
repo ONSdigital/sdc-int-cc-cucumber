@@ -21,16 +21,24 @@ public final class PageXpath {
     static final String CONTINUE_BUTTON = "//form//main//button[@type='submit']";
   }
 
+  public final class Start {
+    static final String SEL_LINK_TEXT = "//a[text()='Survey Enquiry Line (SEL)']";
+    static final String TEL_OPS_LINK_TEXT = "//a[text()='Telephone Operations (TO)']";
+    static final String ADMIN_LINK_TEXT = "//a[text()='Administration']";
+  }
+
+  public final class Sel {
+    static final String FIND_CASE_BY_POSTCODE_LINK_TEXT = "//a[text()='Find case via postcode']";
+    static final String FIND_CASE_BY_ADDR_SEARCH_LINK_TEXT =
+        "//a[text()='Find case via address text search']";
+    static final String POSTCODE_INPUT = "//main//input[@id='postcode']";
+    static final String RADIO_FOURTH_ADDR = "(//form//fieldset//input)[4]";
+  }
+
   static final String XPATH_PARAGRAPH_ADDRESS = "//main//h1/following-sibling::p";
 
   // For the Address Confirmation page
   static final String XPATH_EM_ADDRESS = "//form//p[@class='cc-address-display']";
   static final String XPATH_RADIO_ADDRESS_YES = "//fieldset//input[@id='yes']";
   static final String XPATH_RADIO_ADDRESS_NO = "//fieldset//input[@id='no']";
-
-  public final class Start {
-    static final String SEL_LINK_TEXT = "Survey Enquiry Line (SEL)";
-    static final String TEL_OPS_LINK_TEXT = "Telephone Operations (TO)";
-    static final String ADMIN_LINK_TEXT = "Administration";
-  }
 }

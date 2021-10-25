@@ -10,6 +10,7 @@ import uk.gov.ons.ctp.integration.cccucumber.GlueConst;
     plugin = {"pretty", "html:target/cucumber/results.html"},
     features = {
       GlueConst.FEATURES_PATH + "Feature1.feature",
+      GlueConst.FEATURES_PATH + "SurveyEnquiryLine.feature"
     },
     tags = GlueConst.COMMON_TAGS,
     glue = {GlueConst.GLUE_PKG})

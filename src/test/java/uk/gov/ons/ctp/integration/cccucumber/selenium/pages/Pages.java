@@ -9,8 +9,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import uk.gov.ons.ctp.common.util.WebDriverFactory;
-import uk.gov.ons.ctp.integration.cccucumber.selenium.pageobject.ConfirmAddress;
+import uk.gov.ons.ctp.integration.cccucumber.selenium.pageobject.SelAddressSelection;
+import uk.gov.ons.ctp.integration.cccucumber.selenium.pageobject.SelPostcodeSearch;
 import uk.gov.ons.ctp.integration.cccucumber.selenium.pageobject.StartPage;
+import uk.gov.ons.ctp.integration.cccucumber.selenium.pageobject.SurveyEnquiryLine;
 import uk.gov.ons.ctp.integration.cccucumber.selenium.pages.PageTracker.PageId;
 
 @Component
@@ -25,7 +27,8 @@ public class Pages {
   private PageTracker pageTracker;
 
   private StartPage startPage;
-  private ConfirmAddress confirmAddress;
+  private SelPostcodeSearch selPostcodeSearch;
+  private SelAddressSelection selAddressSelection;
 
   @PostConstruct
   private void setupWebDriver() {
@@ -33,20 +36,34 @@ public class Pages {
     this.pageTracker = new PageTracker(webDriver);
   }
 
-  public ConfirmAddress getConfirmAddress() {
-    if (confirmAddress == null) {
-      confirmAddress = new ConfirmAddress(webDriver);
-    }
-    pageTracker.verifyCurrentPage(PageId.CONFIRM_ADDRESS);
-    return confirmAddress;
-  }
-
   public StartPage getStartPage() {
     if (startPage == null) {
       startPage = new StartPage(webDriver, envBaseUrl);
     }
-    pageTracker.verifyCurrentPage(PageId.START_PAGE);
+    pageTracker.verifyCurrentPage(PageId.START);
     return startPage;
+  }
+
+  public SurveyEnquiryLine getSurveyEnquiryLine() {
+    SurveyEnquiryLine page = new SurveyEnquiryLine(webDriver);
+    pageTracker.verifyCurrentPage(PageId.SURVEY_ENQUIRY_LINE);
+    return page;
+  }
+
+  public SelPostcodeSearch getSelPostcodeSearch() {
+    if (selPostcodeSearch == null) {
+      selPostcodeSearch = new SelPostcodeSearch(webDriver);
+    }
+    pageTracker.verifyCurrentPage(PageId.SEL_POSTCODE_SEARCH);
+    return selPostcodeSearch;
+  }
+
+  public SelAddressSelection getSelAddressSelection() {
+    if (selAddressSelection == null) {
+      selAddressSelection = new SelAddressSelection(webDriver);
+    }
+    pageTracker.verifyCurrentPage(PageId.SEL_ADDR_SELECTION);
+    return selAddressSelection;
   }
 
   public WebDriver getWebDriver() {

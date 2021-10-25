@@ -10,8 +10,8 @@ import uk.gov.ons.ctp.integration.cccucumber.selenium.pages.PageTracker.PageId;
 public class StartPage extends PageObjectBase {
 
   public StartPage(final WebDriver driver, final String urlPrefix) {
-    super(PageId.START_PAGE, driver);
-    startURL = urlPrefix + "en/start/";
+    super(PageId.START, driver);
+    startURL = urlPrefix + "/";
     driver.get(startURL);
     waitForLoading();
   }

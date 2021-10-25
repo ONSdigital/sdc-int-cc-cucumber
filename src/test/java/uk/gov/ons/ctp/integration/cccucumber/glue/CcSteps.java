@@ -1,25 +1,25 @@
 package uk.gov.ons.ctp.integration.cccucumber.glue;
 
-import static org.junit.Assert.assertEquals;
-
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import org.openqa.selenium.WebDriverException;
+import uk.gov.ons.ctp.common.domain.Channel;
+import uk.gov.ons.ctp.common.domain.Source;
 import uk.gov.ons.ctp.common.event.TopicType;
-import uk.gov.ons.ctp.common.util.Wait;
-import uk.gov.ons.ctp.integration.cccucumber.selenium.pageobject.ConfirmAddress;
+import uk.gov.ons.ctp.integration.cccucumber.data.ExampleData;
+import uk.gov.ons.ctp.integration.cccucumber.selenium.pageobject.SelAddressSelection;
+import uk.gov.ons.ctp.integration.cccucumber.selenium.pageobject.SelPostcodeSearch;
+import uk.gov.ons.ctp.integration.cccucumber.selenium.pageobject.StartPage;
+import uk.gov.ons.ctp.integration.cccucumber.selenium.pageobject.SurveyEnquiryLine;
 
 public class CcSteps extends StepsBase {
-  private Wait wait;
 
   @Before("@Setup")
   public void setup() throws Exception {
     super.setupForAll();
-    wait = new Wait(driver);
-    pages.getStartPage();
   }
 
   @After("@TearDown")
@@ -44,76 +44,58 @@ public class CcSteps extends StepsBase {
     System.out.println("THEN");
   }
 
-  @Given("The respondent confirms a valid {} address {string}")
-  public void confirmAddress(final String postCode) throws Exception {
-    //  StartPage startPage = pages.getStartPage();
-    pages.getStartPage();
-    // startPage.clickRequestNewCodeLink();
-    confirmYourAddress(postCode);
+  @Given("A case exists with my address")
+  public void createKnownCase() throws Exception {
+    context.surveyUpdatePayload = ExampleData.createSurveyUpdate();
+    context.collectionExercise = ExampleData.createCollectionExercise();
+    context.caseCreatedPayload = ExampleData.createCaseUpdate(context.caseKey);
+    sendInboundEvents();
+    // TODO need some checking code against the DB.
   }
 
-  @Then("I am presented with a page to confirm my address")
-  public void verifyConfirmMyAddress() {
-    ConfirmAddress confirmAddress = pages.getConfirmAddress();
-    verifyCorrectOnsLogoUsed(confirmAddress.getOnsLogo());
+  @And("I have navigated to the SEL Postcode search page")
+  public void navigateToSelPostcodeSeachPage() {
+    StartPage st = pages.getStartPage();
+    verifyCorrectOnsLogoUsed(st.getOnsLogo());
 
-    assertEquals(
-        "address confirmation title has incorrect text",
-        pages.getConfirmAddress().getExpectedConfirmText(),
-        pages.getConfirmAddress().getConfirmAddressTitleText());
+    st.clickSelLink();
+    SurveyEnquiryLine sel = pages.getSurveyEnquiryLine();
+
+    sel.clickFindCaseByPostcodeLink();
+    pages.getSelPostcodeSearch();
   }
 
-  @Given("I select the “Yes, this address is correct” option")
-  public void confirmAddressIsCorrect() {
-    pages.getConfirmAddress().clickOptionYes();
+  @When("I have entered a UK postcode and clicked Continue")
+  public void enteredCallersPostcode() {
+    SelPostcodeSearch page = pages.getSelPostcodeSearch();
+    page.inputPostcode("EX41EH");
+    page.clickContinueButton();
   }
 
-  @Given("I click the “Continue” button")
-  public void clickContinueAfterConfirmAddress() {
-    wait.forLoading(1);
-    try {
-      pages.getConfirmAddress().clickContinueButton();
-    } catch (WebDriverException e) {
-      // tolerate no EQ deployment for testing
-      // context.errorMessageContainingCallToEQ = e.getMessage();
-    }
+  @And("I select the desired address from a list")
+  public void selectAddressFromList() {
+    SelAddressSelection page = pages.getSelAddressSelection();
+    page.selectFourthOption();
+    page.clickContinueButton();
   }
 
-  @Given("an empty queue exists for sending Respondent Authenticated events")
-  public void emptyEventQueueForRespondentAuthenticated() throws Exception {
-    emptyEventQueue(TopicType.UAC_AUTHENTICATE);
+  @Then("The case is displayed for selection")
+  public void caseIsDisplayedForSelection() {
+    // WRITEME
   }
 
-  @Given("an empty queue exists for sending Survey Launched events")
-  public void emptyEventQueuForSurveyLaunched() throws Exception {
-    emptyEventQueue(TopicType.SURVEY_LAUNCH);
-  }
-
-  @Given("an empty queue exists for sending Fulfilment Requested events")
-  public void emptyEventQueueForFulfilmentRequested() throws Exception {
-    emptyEventQueue(TopicType.FULFILMENT);
-  }
-
-  //  private void sendRequiredInboundEvents(TopicType eventType) throws Exception {
-  //    pubSub.sendEvent(
-  //        TopicType.SURVEY_UPDATE, Source.SAMPLE_LOADER, Channel.RM, context.surveyUpdatePayload);
-  //    pubSub.sendEvent(
-  //        TopicType.COLLECTION_EXERCISE_UPDATE,
-  //        Source.SAMPLE_LOADER,
-  //        Channel.RM,
-  //        context.collectionExercise);
-  //    pubSub.sendEvent(
-  //        TopicType.CASE_UPDATE, Source.CASE_SERVICE, Channel.RM, context.caseCreatedPayload);
-  //  }
-
-  private void confirmYourAddress(String postCode) throws Exception {
-    // TODO we will revisit these when the features are made to work, when Address typeahead is
-    // working in cucumber tests
-    //    emptyEventQueue(EventType.NEW_ADDRESS_REPORTED);
-    emptyEventQueue(TopicType.FULFILMENT);
-
-    ConfirmAddress confirmAddressPage = pages.getConfirmAddress();
-    confirmAddressPage.clickOptionYes();
-    confirmAddressPage.clickContinueButton();
+  private void sendInboundEvents() throws Exception {
+    pubSub.sendEvent(
+        TopicType.SURVEY_UPDATE, Source.SAMPLE_LOADER, Channel.RM, context.surveyUpdatePayload);
+    Thread.sleep(1000); // FIXME need something better.
+    pubSub.sendEvent(
+        TopicType.COLLECTION_EXERCISE_UPDATE,
+        Source.SAMPLE_LOADER,
+        Channel.RM,
+        context.collectionExercise);
+    Thread.sleep(1000);
+    pubSub.sendEvent(
+        TopicType.CASE_UPDATE, Source.CASE_SERVICE, Channel.RM, context.caseCreatedPayload);
+    Thread.sleep(1000);
   }
 }

@@ -1,6 +1,7 @@
 
 Feature:  Feature1
 
+	@ignore
   @F1 @Setup @TearDown
   Scenario: F1 description
     Given Pseudo given

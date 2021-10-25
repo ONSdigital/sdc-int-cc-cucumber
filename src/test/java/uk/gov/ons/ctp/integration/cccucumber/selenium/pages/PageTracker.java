@@ -12,18 +12,32 @@ public class PageTracker {
 
   @Getter
   public enum PageId {
-    START_PAGE("Contact Centre"),
-    CONFIRM_ADDRESS("Is this the correct address?"),
-    ERROR_PAGE("Error - ONS Surveys");
+    START("Contact Centre", "h1"),
+    SURVEY_ENQUIRY_LINE("Survey Enquiry Line", "h1"),
+    SEL_POSTCODE_SEARCH("What is the caller's postcode?", "h1"),
+    SEL_ADDR_SELECTION("Select the callers address", "h1"),
+    CONFIRM_ADDRESS("Is this the correct address?", "title"),
+    ERROR_PAGE("Error - ONS Surveys", "title");
 
     private String id;
+    private String tag;
 
-    private PageId(String id) {
+    private PageId(String id, String tag) {
       this.id = id;
+      this.tag = tag;
     }
 
     String getId() {
       return id;
+    }
+
+    String getTag() {
+      return tag;
+    }
+
+    String htmlFragment() {
+      // don't use the start tag, since this can contain other attributes
+      return id + "</" + tag + ">";
     }
   }
 
@@ -48,7 +62,7 @@ public class PageTracker {
     // Identify current page based on its content
     PageId actualPage = null;
     for (PageId currPageId : PageId.values()) {
-      if (pageContent.contains(currPageId.getId())) {
+      if (pageContent.contains(currPageId.htmlFragment())) {
         actualPage = currPageId;
         break;
       }
@@ -57,8 +71,10 @@ public class PageTracker {
     // Check if we are on the expected page
     String exceptionText = null;
     if (actualPage == null) {
-      String pageTitle = StringUtils.substringsBetween(pageContent, "<title>", "</title>")[0];
-      exceptionText = "Failed to identify page. Page title: '" + pageTitle + "'";
+      String tag = expectedPage.getTag();
+      String pageTitle = StringUtils.substringsBetween(pageContent, "<" + tag, "</" + tag + ">")[0];
+      exceptionText =
+          "Failed to identify page. Unique Page text: '" + pageTitle + "' in tag: " + tag;
     } else if (expectedPage != actualPage) {
       exceptionText =
           "On wrong page. Expected page: "
