@@ -50,7 +50,7 @@ public class CcSteps extends StepsBase {
     context.collectionExercise = ExampleData.createCollectionExercise();
     context.caseCreatedPayload = ExampleData.createCaseUpdate(context.caseKey);
     sendInboundEvents();
-    // TODO need some checking code against the DB.
+    verifyCaseExistsInCCSvcDatabase(context.caseKey);
   }
 
   @And("I have navigated to the SEL Postcode search page")

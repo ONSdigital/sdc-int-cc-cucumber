@@ -3,10 +3,12 @@ package uk.gov.ons.ctp.integration.cccucumber.glue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import java.util.UUID;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.repository.CrudRepository;
 import uk.gov.ons.ctp.common.event.TopicType;
 import uk.gov.ons.ctp.common.event.model.FulfilmentEvent;
 import uk.gov.ons.ctp.common.event.model.GenericEvent;
@@ -20,8 +22,8 @@ public abstract class StepsBase {
   static final long PUBSUB_TIMEOUT_MS = 20000;
   static final long WAIT_TIMEOUT = 20_000L;
 
+  @Autowired CaseRepository caseRepo;
   @Autowired GlueContext context;
-  // @Autowired RespondentDataRepository dataRepo;
   @Autowired WebDriverFactory webDriverFactory;
   @Autowired Pages pages;
 
@@ -93,5 +95,13 @@ public abstract class StepsBase {
       default:
         throw new IllegalArgumentException("Cannot create event for event type: " + eventType);
     }
+  }
+
+  void verifyCaseExistsInCCSvcDatabase(UUID caseId) {
+    caseRepo.findById(caseId).orElseThrow();
+  }
+
+  <T> void waitForCreation(UUID id, CrudRepository<T, UUID> repo) {
+    // WRITEME
   }
 }

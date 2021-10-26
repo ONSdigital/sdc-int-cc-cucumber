@@ -41,11 +41,24 @@ keystore: '{
   }
 }'
 
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/cc
+    username: ccuser
+    password: password
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        default_schema: cc_schema
+        types:
+          print:
+            banner: false
+
 pubsub:
   projectid: local
   emulator:
     host: localhost:9808
     use: true
-
-# FIXME need postgres config    
-    
