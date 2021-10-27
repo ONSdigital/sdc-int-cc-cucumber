@@ -1,11 +1,14 @@
 package uk.gov.ons.ctp.integration.cccucumber.glue;
 
+import static org.junit.Assert.assertTrue;
+
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import java.util.UUID;
 import uk.gov.ons.ctp.common.domain.Channel;
 import uk.gov.ons.ctp.common.domain.Source;
 import uk.gov.ons.ctp.common.event.TopicType;
@@ -50,7 +53,7 @@ public class CcSteps extends StepsBase {
     context.collectionExercise = ExampleData.createCollectionExercise();
     context.caseCreatedPayload = ExampleData.createCaseUpdate(context.caseKey);
     sendInboundEvents();
-    verifyCaseExistsInCCSvcDatabase(context.caseKey);
+    assertTrue(db.caseExists(context.caseKey));
   }
 
   @And("I have navigated to the SEL Postcode search page")
@@ -87,15 +90,17 @@ public class CcSteps extends StepsBase {
   private void sendInboundEvents() throws Exception {
     pubSub.sendEvent(
         TopicType.SURVEY_UPDATE, Source.SAMPLE_LOADER, Channel.RM, context.surveyUpdatePayload);
-    Thread.sleep(1000); // FIXME need something better.
+    db.waitForSurvey(UUID.fromString(context.surveyUpdatePayload.getSurveyId()));
+
     pubSub.sendEvent(
         TopicType.COLLECTION_EXERCISE_UPDATE,
         Source.SAMPLE_LOADER,
         Channel.RM,
         context.collectionExercise);
-    Thread.sleep(1000);
+    db.waitForCollEx(UUID.fromString(context.collectionExercise.getCollectionExerciseId()));
+
     pubSub.sendEvent(
         TopicType.CASE_UPDATE, Source.CASE_SERVICE, Channel.RM, context.caseCreatedPayload);
-    Thread.sleep(1000);
+    db.waitForCase(UUID.fromString(context.caseCreatedPayload.getCaseId()));
   }
 }

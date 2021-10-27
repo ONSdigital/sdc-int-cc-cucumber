@@ -2,13 +2,12 @@ package uk.gov.ons.ctp.integration.cccucumber.glue;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
-import java.util.UUID;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.repository.CrudRepository;
 import uk.gov.ons.ctp.common.event.TopicType;
 import uk.gov.ons.ctp.common.event.model.FulfilmentEvent;
 import uk.gov.ons.ctp.common.event.model.GenericEvent;
@@ -16,13 +15,13 @@ import uk.gov.ons.ctp.common.event.model.SurveyLaunchEvent;
 import uk.gov.ons.ctp.common.event.model.UacAuthenticateEvent;
 import uk.gov.ons.ctp.common.pubsub.PubSubHelper;
 import uk.gov.ons.ctp.common.util.WebDriverFactory;
+import uk.gov.ons.ctp.integration.cccucumber.data.ExampleData;
 import uk.gov.ons.ctp.integration.cccucumber.selenium.pages.Pages;
 
 public abstract class StepsBase {
   static final long PUBSUB_TIMEOUT_MS = 20000;
-  static final long WAIT_TIMEOUT = 20_000L;
 
-  @Autowired CaseRepository caseRepo;
+  @Autowired CcSvcDatabase db;
   @Autowired GlueContext context;
   @Autowired WebDriverFactory webDriverFactory;
   @Autowired Pages pages;
@@ -43,7 +42,8 @@ public abstract class StepsBase {
   PubSubHelper pubSub;
 
   public void setupForAll() throws Exception {
-    // dataRepo.deleteCollections();
+    db.deleteSurveyCascade(ExampleData.DEFAULT_SURVEY_ID);
+    assertFalse(db.caseExists(context.caseKey));
     pubSub = PubSubHelper.instance(pubsubProjectId, false, useEmulatorPubSub, emulatorPubSubHost);
     driver = pages.getWebDriver();
   }
@@ -75,17 +75,15 @@ public abstract class StepsBase {
     pubSub.flushSubscription(eventType);
   }
 
-  void assertNewEventHasFired(TopicType eventType) throws Exception {
-
+  void assertNewEventHasFired(TopicType topicType) throws Exception {
     final GenericEvent event =
-        (GenericEvent) pubSub.getMessage(eventType, eventClass(eventType), PUBSUB_TIMEOUT_MS);
-
+        (GenericEvent) pubSub.getMessage(topicType, eventClass(topicType), PUBSUB_TIMEOUT_MS);
     assertNotNull(event);
     assertNotNull(event.getHeader());
   }
 
-  Class<?> eventClass(TopicType eventType) {
-    switch (eventType) {
+  Class<?> eventClass(TopicType topicType) {
+    switch (topicType) {
       case FULFILMENT:
         return FulfilmentEvent.class;
       case UAC_AUTHENTICATE:
@@ -93,15 +91,7 @@ public abstract class StepsBase {
       case SURVEY_LAUNCH:
         return SurveyLaunchEvent.class;
       default:
-        throw new IllegalArgumentException("Cannot create event for event type: " + eventType);
+        throw new IllegalArgumentException("Cannot create event for topic type: " + topicType);
     }
-  }
-
-  void verifyCaseExistsInCCSvcDatabase(UUID caseId) {
-    caseRepo.findById(caseId).orElseThrow();
-  }
-
-  <T> void waitForCreation(UUID id, CrudRepository<T, UUID> repo) {
-    // WRITEME
   }
 }
