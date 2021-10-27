@@ -1,0 +1,9 @@
+apiVersion: v1
+data:
+  cc-host-scheme: http
+  cc-host-ip: cc-dev.int.gcp.onsdigital.uk
+kind: ConfigMap
+metadata:
+  annotations: {}
+  name: cc-cucumber
+  namespace: default
