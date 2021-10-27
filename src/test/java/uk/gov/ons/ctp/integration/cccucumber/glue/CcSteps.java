@@ -1,6 +1,7 @@
 package uk.gov.ons.ctp.integration.cccucumber.glue;
 
 import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
@@ -13,6 +14,7 @@ import uk.gov.ons.ctp.common.domain.Channel;
 import uk.gov.ons.ctp.common.domain.Source;
 import uk.gov.ons.ctp.common.event.TopicType;
 import uk.gov.ons.ctp.integration.cccucumber.data.ExampleData;
+import uk.gov.ons.ctp.integration.cccucumber.selenium.pageobject.AvailableCases;
 import uk.gov.ons.ctp.integration.cccucumber.selenium.pageobject.SelAddressSelection;
 import uk.gov.ons.ctp.integration.cccucumber.selenium.pageobject.SelPostcodeSearch;
 import uk.gov.ons.ctp.integration.cccucumber.selenium.pageobject.StartPage;
@@ -29,22 +31,6 @@ public class CcSteps extends StepsBase {
   public void deleteDriver() {
     super.closeDriver();
     super.destroyPubSub();
-  }
-
-  @Given("Pseudo given")
-  public void dummyGiven() {
-    System.out.println("GIVEN");
-  }
-
-  @When("Pseudo when")
-  public void dummyWhen() {}
-
-  @When("Pseudo and")
-  public void dummyAnd() {}
-
-  @When("Pseudo then")
-  public void dummyThen() {
-    System.out.println("THEN");
   }
 
   @Given("A case exists with my address")
@@ -84,7 +70,8 @@ public class CcSteps extends StepsBase {
 
   @Then("The case is displayed for selection")
   public void caseIsDisplayedForSelection() {
-    // WRITEME
+    var page = new AvailableCases(driver);
+    assertNotNull(page);
   }
 
   private void sendInboundEvents() throws Exception {

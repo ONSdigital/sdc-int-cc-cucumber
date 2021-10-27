@@ -8,10 +8,7 @@ import uk.gov.ons.ctp.integration.cccucumber.GlueConst;
 @RunWith(Cucumber.class)
 @CucumberOptions(
     plugin = {"pretty", "html:target/cucumber/results.html"},
-    features = {
-      GlueConst.FEATURES_PATH + "Feature1.feature",
-      GlueConst.FEATURES_PATH + "SurveyEnquiryLine.feature"
-    },
+    features = {GlueConst.FEATURES_PATH + "SurveyEnquiryLine.feature"},
     tags = GlueConst.COMMON_TAGS,
     glue = {GlueConst.GLUE_PKG})
 public class CucumberTestRunner {}

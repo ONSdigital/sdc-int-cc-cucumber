@@ -5,15 +5,13 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import uk.gov.ons.ctp.integration.cccucumber.selenium.pages.PageTracker.PageId;
+import uk.gov.ons.ctp.integration.cccucumber.selenium.pages.PageXpath;
 
 @Getter
 public class StartPage extends PageObjectBase {
 
   public StartPage(final WebDriver driver, final String urlPrefix) {
-    super(PageId.START, driver);
-    startURL = urlPrefix + "/";
-    driver.get(startURL);
-    waitForLoading();
+    super(PageId.START, driver, urlPrefix);
   }
 
   @FindBy(xpath = PageXpath.General.LOGO)

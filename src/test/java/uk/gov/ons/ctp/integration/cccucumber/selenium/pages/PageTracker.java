@@ -2,11 +2,11 @@ package uk.gov.ons.ctp.integration.cccucumber.selenium.pages;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
-import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.openqa.selenium.WebDriver;
+import lombok.Getter;
 
 public class PageTracker {
 
@@ -16,8 +16,7 @@ public class PageTracker {
     SURVEY_ENQUIRY_LINE("Survey Enquiry Line", "h1"),
     SEL_POSTCODE_SEARCH("What is the caller's postcode?", "h1"),
     SEL_ADDR_SELECTION("Select the callers address", "h1"),
-    CONFIRM_ADDRESS("Is this the correct address?", "title"),
-    ERROR_PAGE("Error - ONS Surveys", "title");
+    AVAILABLE_CASES("Available cases", "h2");
 
     private String id;
     private String tag;
