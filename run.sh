@@ -3,18 +3,6 @@
 # Run CC cucumber tests , screening out distracting firefox messages.
 #
 
-if [[ -z "$GOOGLE_CLOUD_PROJECT" ]]
-then
-	echo "GOOGLE_CLOUD_PROJECT must be set"
-	exit 1
-fi
-
-if [[ -z "$GOOGLE_APPLICATION_CREDENTIALS" ]]
-then
-	echo "GOOGLE_APPLICATION_CREDENTIALS must be set"
-	exit 1
-fi
-
 which unbuffer >/dev/null 2>&1
 if [[ "$?" != "0" ]]
 then
