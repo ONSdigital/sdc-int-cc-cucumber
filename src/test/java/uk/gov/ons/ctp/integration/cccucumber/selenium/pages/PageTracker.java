@@ -2,11 +2,11 @@ package uk.gov.ons.ctp.integration.cccucumber.selenium.pages;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.openqa.selenium.WebDriver;
-import lombok.Getter;
 
 public class PageTracker {
 

@@ -17,7 +17,6 @@ import uk.gov.ons.ctp.integration.cccucumber.data.ExampleData;
 import uk.gov.ons.ctp.integration.cccucumber.selenium.pageobject.AvailableCases;
 import uk.gov.ons.ctp.integration.cccucumber.selenium.pageobject.SelAddressSelection;
 import uk.gov.ons.ctp.integration.cccucumber.selenium.pageobject.SelPostcodeSearch;
-import uk.gov.ons.ctp.integration.cccucumber.selenium.pageobject.StartPage;
 import uk.gov.ons.ctp.integration.cccucumber.selenium.pageobject.SurveyEnquiryLine;
 
 public class CcSteps extends StepsBase {
@@ -44,26 +43,25 @@ public class CcSteps extends StepsBase {
 
   @And("I have navigated to the SEL Postcode search page")
   public void navigateToSelPostcodeSeachPage() {
-    StartPage st = pages.getStartPage();
+    var st = pages.getStartPage();
     verifyCorrectOnsLogoUsed(st.getOnsLogo());
 
     st.clickSelLink();
-    SurveyEnquiryLine sel = pages.getSurveyEnquiryLine();
+    var sel = new SurveyEnquiryLine(driver);
 
     sel.clickFindCaseByPostcodeLink();
-    pages.getSelPostcodeSearch();
   }
 
   @When("I have entered a UK postcode and clicked Continue")
   public void enteredCallersPostcode() {
-    SelPostcodeSearch page = pages.getSelPostcodeSearch();
+    var page = new SelPostcodeSearch(driver);
     page.inputPostcode("EX41EH");
     page.clickContinueButton();
   }
 
   @And("I select the desired address from a list")
   public void selectAddressFromList() {
-    SelAddressSelection page = pages.getSelAddressSelection();
+    var page = new SelAddressSelection(driver);
     page.selectFourthOption();
     page.clickContinueButton();
   }

@@ -9,10 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import uk.gov.ons.ctp.common.util.WebDriverFactory;
-import uk.gov.ons.ctp.integration.cccucumber.selenium.pageobject.SelAddressSelection;
-import uk.gov.ons.ctp.integration.cccucumber.selenium.pageobject.SelPostcodeSearch;
 import uk.gov.ons.ctp.integration.cccucumber.selenium.pageobject.StartPage;
-import uk.gov.ons.ctp.integration.cccucumber.selenium.pageobject.SurveyEnquiryLine;
 
 @Component
 @Scope(SCOPE_CUCUMBER_GLUE)
@@ -31,18 +28,6 @@ public class Pages {
 
   public StartPage getStartPage() {
     return new StartPage(webDriver, envBaseUrl);
-  }
-
-  public SurveyEnquiryLine getSurveyEnquiryLine() {
-    return new SurveyEnquiryLine(webDriver);
-  }
-
-  public SelPostcodeSearch getSelPostcodeSearch() {
-    return new SelPostcodeSearch(webDriver);
-  }
-
-  public SelAddressSelection getSelAddressSelection() {
-    return new SelAddressSelection(webDriver);
   }
 
   public WebDriver getWebDriver() {

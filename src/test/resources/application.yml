@@ -46,8 +46,9 @@ spring:
     url: jdbc:postgresql://localhost:5432/cc
     username: ccuser
     password: password
-  hikari:
-    auto-commit: true
+    hikari:
+      schema: cc_schema
+      auto-commit: true
 
 pubsub:
   projectid: local

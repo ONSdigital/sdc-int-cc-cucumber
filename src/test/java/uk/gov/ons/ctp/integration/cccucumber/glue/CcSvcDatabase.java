@@ -16,7 +16,7 @@ public class CcSvcDatabase {
   }
 
   private boolean itemExists(String table, UUID id) {
-    String sql = "SELECT COUNT(*) FROM cc_schema." + table + " WHERE id = ? LIMIT 1";
+    String sql = "SELECT COUNT(*) FROM " + table + " WHERE id = ? LIMIT 1";
     return jdbcTemplate.queryForObject(sql, Integer.class, id) != 0;
   }
 
@@ -33,19 +33,19 @@ public class CcSvcDatabase {
   }
 
   int deleteSurvey(UUID id) {
-    String sql = "DELETE FROM cc_schema.survey WHERE id = ?";
+    String sql = "DELETE FROM survey WHERE id = ?";
     return jdbcTemplate.update(sql, id);
   }
 
   int deleteCollectionExercisesInSurvey(UUID surveyId) {
-    String sql = "DELETE FROM cc_schema.collection_exercise WHERE survey_id = ?";
+    String sql = "DELETE FROM collection_exercise WHERE survey_id = ?";
     return jdbcTemplate.update(sql, surveyId);
   }
 
   int deleteCasesInSurvey(UUID surveyId) {
     String sql =
-        "DELETE FROM cc_schema.collection_case WHERE collection_exercise_id IN "
-            + "(SELECT id FROM cc_schema.collection_exercise WHERE survey_id = ?)";
+        "DELETE FROM collection_case WHERE collection_exercise_id IN "
+            + "(SELECT id FROM collection_exercise WHERE survey_id = ?)";
     return jdbcTemplate.update(sql, surveyId);
   }
 
