@@ -26,9 +26,6 @@ public abstract class StepsBase {
   @Autowired WebDriverFactory webDriverFactory;
   @Autowired Pages pages;
 
-  @Value("${keystore}")
-  String keystore;
-
   @Value("${pubsub.projectid}")
   private String pubsubProjectId;
 
