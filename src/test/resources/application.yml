@@ -1,0 +1,42 @@
+
+info:
+  name: ${project.artifactId}
+  version: ${project.version}
+  origin: ${scm.url}
+  commit: ${buildNumber}
+  branch: ${scmBranch}
+  built: ${timestamp}
+
+# logging config here as a reminder as to how to override logback from cmd line
+# ie -Dlogging.level.org.springframework=DEBUG
+logging:
+  level:
+    root: INFO
+    '[uk.gov.ons.ctp]': INFO
+    '[uk.gov.ons.ctp.common]': WARN
+    '[uk.gov.ons.ctp.common.util.WebDriverFactory]': INFO
+    '[org.springframework]': ERROR
+    '[org.openqa.selenium.remote.ProtocolHandshake]': WARN
+
+ccui:
+  baseurl: http://localhost:5000/
+  
+webdriver:
+  type: FIREFOX
+  logging_level: WARN
+  headless: true
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/cc
+    username: ccuser
+    password: password
+    hikari:
+      schema: cc_schema
+      auto-commit: true
+
+pubsub:
+  projectid: local
+  emulator:
+    host: localhost:9808
+    use: true
