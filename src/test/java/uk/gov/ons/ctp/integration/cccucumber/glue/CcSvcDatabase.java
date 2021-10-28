@@ -9,6 +9,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class CcSvcDatabase {
+  private static final int POLL_MILLIS = 100;
+  private static final int POLL_MAX = 20;
   private JdbcTemplate jdbcTemplate;
 
   public CcSvcDatabase(JdbcTemplate jdbcTemplate) {
@@ -55,29 +57,29 @@ public class CcSvcDatabase {
     deleteSurvey(surveyId);
   }
 
-  boolean waitForCreation(Supplier<Boolean> itemExists) {
-    for (int i = 0; i < 20; i++) {
+  void waitForCreation(Supplier<Boolean> itemExists, String description) {
+    for (int i = 0; i < POLL_MAX; i++) {
       try {
-        Thread.sleep(100);
+        Thread.sleep(POLL_MILLIS);
       } catch (InterruptedException e) {
         fail("Waiting interrupted");
       }
       if (itemExists.get()) {
-        return true;
+        return;
       }
     }
-    return false;
+    fail("Timeout waiting for creation of database object: " + description);
   }
 
-  boolean waitForSurvey(UUID id) {
-    return waitForCreation(() -> surveyExists(id));
+  void waitForSurvey(UUID id) {
+    waitForCreation(() -> surveyExists(id), "survey");
   }
 
-  boolean waitForCollEx(UUID id) {
-    return waitForCreation(() -> collectionExerciseExists(id));
+  void waitForCollEx(UUID id) {
+    waitForCreation(() -> collectionExerciseExists(id), "collection exercise");
   }
 
-  boolean waitForCase(UUID id) {
-    return waitForCreation(() -> caseExists(id));
+  void waitForCase(UUID id) {
+    waitForCreation(() -> caseExists(id), "case");
   }
 }
