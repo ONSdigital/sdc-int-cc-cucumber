@@ -35,6 +35,11 @@ spring:
       schema: cc_schema
       auto-commit: true
 
+db:
+  poll:
+    count: 100
+    interval-millis: 100
+
 pubsub:
   projectid: local
   emulator:

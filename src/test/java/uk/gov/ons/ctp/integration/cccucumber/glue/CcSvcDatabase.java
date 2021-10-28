@@ -4,14 +4,19 @@ import static org.junit.Assert.fail;
 
 import java.util.UUID;
 import java.util.function.Supplier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 @Component
 public class CcSvcDatabase {
-  private static final int POLL_MILLIS = 100;
-  private static final int POLL_MAX = 20;
   private JdbcTemplate jdbcTemplate;
+
+  @Value("${db.poll.count}")
+  private int pollCount;
+
+  @Value("${db.poll.interval-millis}")
+  private int pollIntervalMillis;
 
   public CcSvcDatabase(JdbcTemplate jdbcTemplate) {
     this.jdbcTemplate = jdbcTemplate;
@@ -58,9 +63,9 @@ public class CcSvcDatabase {
   }
 
   void waitForCreation(Supplier<Boolean> itemExists, String description) {
-    for (int i = 0; i < POLL_MAX; i++) {
+    for (int i = 0; i < pollCount; i++) {
       try {
-        Thread.sleep(POLL_MILLIS);
+        Thread.sleep(pollIntervalMillis);
       } catch (InterruptedException e) {
         fail("Waiting interrupted");
       }
