@@ -15,19 +15,19 @@ package uk.gov.ons.ctp.integration.cccucumber.selenium.pages;
  * expression: '//form//main//a[@href='/webchat']'
  */
 public final class PageXpath {
-  public final class General {
+  public static final class General {
     public static final String LOGO = "//*[text() = 'Office for National Statistics logo']";
     public static final String PAGE_TITLE = "//main//h1";
     public static final String CONTINUE_BUTTON = "//form//main//button[@type='submit']";
   }
 
-  public final class Start {
+  public static final class Start {
     public static final String SEL_LINK_TEXT = "//a[text()='Survey Enquiry Line (SEL)']";
     public static final String TEL_OPS_LINK_TEXT = "//a[text()='Telephone Operations (TO)']";
     public static final String ADMIN_LINK_TEXT = "//a[text()='Administration']";
   }
 
-  public final class Sel {
+  public static final class Sel {
     public static final String FIND_CASE_BY_POSTCODE_LINK_TEXT =
         "//a[text()='Find case via postcode']";
     public static final String FIND_CASE_BY_ADDR_SEARCH_LINK_TEXT =
