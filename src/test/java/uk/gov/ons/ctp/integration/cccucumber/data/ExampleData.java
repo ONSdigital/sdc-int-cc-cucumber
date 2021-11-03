@@ -30,6 +30,15 @@ public class ExampleData {
     sample.setPostcode("EX4 1EH");
     sample.setRegion("E");
     sample.setUprn("100040226402");
+
+    sample.setGor9d("E12000009");
+    sample.setLaCode("EX");
+    sample.setUprnLatitude("50.72116");
+    sample.setUprnLongitude("-3.53363");
+
+    sample.setQuestionnaire("12345");
+    sample.setSampleUnitRef("REF-4321");
+    sample.setCohort(23);
     return sample;
   }
 
