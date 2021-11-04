@@ -31,7 +31,7 @@ public class CcSteps extends StepsBase {
 
   private String addressNotFound =
       "Confirm that the postcode %s is correct. "
-          + "If the postcode is incorrect, enter a corrected value, else use a different method to find the users case";
+          + "If the postcode is incorrect, enter a corrected value, else use a different method to find the caller's case";
 
   @Before("@Setup")
   public void setup() throws Exception {
