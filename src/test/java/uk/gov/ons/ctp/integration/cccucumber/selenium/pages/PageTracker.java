@@ -16,7 +16,9 @@ public class PageTracker {
     SURVEY_ENQUIRY_LINE("Survey Enquiry Line", "h1"),
     SEL_POSTCODE_SEARCH("What is the caller's postcode?", "h1"),
     SEL_ADDR_SELECTION("Select the callers address", "h1"),
-    AVAILABLE_CASES("Available cases", "h2");
+    AVAILABLE_CASES("Available cases", "h2"),
+    NO_CASE_FOUND("There are no cases for this address", "h1"),
+    ADDRESS_NOT_FOUND("Address not found", "h1");
 
     private String id;
     private String tag;

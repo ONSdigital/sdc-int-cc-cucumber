@@ -1,5 +1,6 @@
 package uk.gov.ons.ctp.integration.cccucumber.glue;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -14,12 +15,23 @@ import uk.gov.ons.ctp.common.domain.Channel;
 import uk.gov.ons.ctp.common.domain.Source;
 import uk.gov.ons.ctp.common.event.TopicType;
 import uk.gov.ons.ctp.integration.cccucumber.data.ExampleData;
+import uk.gov.ons.ctp.integration.cccucumber.selenium.pageobject.AddressNotFound;
 import uk.gov.ons.ctp.integration.cccucumber.selenium.pageobject.AvailableCases;
+import uk.gov.ons.ctp.integration.cccucumber.selenium.pageobject.NoCasesFound;
 import uk.gov.ons.ctp.integration.cccucumber.selenium.pageobject.SelAddressSelection;
 import uk.gov.ons.ctp.integration.cccucumber.selenium.pageobject.SelPostcodeSearch;
 import uk.gov.ons.ctp.integration.cccucumber.selenium.pageobject.SurveyEnquiryLine;
 
 public class CcSteps extends StepsBase {
+
+  private String currentPage;
+  private String caseNotFoundErrorMsg =
+      "Confirm this is the correct address, and that the it is the address "
+          + "the caller was asked to complete the survey for";
+
+  private String addressNotFound =
+      "Confirm that the postcode %s is correct. "
+          + "If the postcode is incorrect, enter a corrected value, else use a different method to find the users case";
 
   @Before("@Setup")
   public void setup() throws Exception {
@@ -30,46 +42,6 @@ public class CcSteps extends StepsBase {
   public void deleteDriver() {
     super.closeDriver();
     super.destroyPubSub();
-  }
-
-  @Given("A case exists with my address")
-  public void createKnownCase() throws Exception {
-    context.surveyUpdatePayload = ExampleData.createSurveyUpdate();
-    context.collectionExercise = ExampleData.createCollectionExercise();
-    context.caseCreatedPayload = ExampleData.createCaseUpdate(context.caseKey);
-    sendInboundEvents();
-    assertTrue(db.caseExists(context.caseKey));
-  }
-
-  @And("I have navigated to the SEL Postcode search page")
-  public void navigateToSelPostcodeSeachPage() {
-    var st = pages.getStartPage();
-    verifyCorrectOnsLogoUsed(st.getOnsLogo());
-
-    st.clickSelLink();
-    var sel = new SurveyEnquiryLine(driver);
-
-    sel.clickFindCaseByPostcodeLink();
-  }
-
-  @When("I have entered a UK postcode and clicked Continue")
-  public void enteredCallersPostcode() {
-    var page = new SelPostcodeSearch(driver);
-    page.inputPostcode("EX41EH");
-    page.clickContinueButton();
-  }
-
-  @And("I select the desired address from a list")
-  public void selectAddressFromList() {
-    var page = new SelAddressSelection(driver);
-    page.selectFourthOption();
-    page.clickContinueButton();
-  }
-
-  @Then("The case is displayed for selection")
-  public void caseIsDisplayedForSelection() {
-    var page = new AvailableCases(driver);
-    assertNotNull(page);
   }
 
   private void sendInboundEvents() throws Exception {
@@ -87,5 +59,110 @@ public class CcSteps extends StepsBase {
     pubSub.sendEvent(
         TopicType.CASE_UPDATE, Source.CASE_SERVICE, Channel.RM, context.caseCreatedPayload);
     db.waitForCase(UUID.fromString(context.caseCreatedPayload.getCaseId()));
+  }
+
+  @Given("The SEL operator is in CCUI find case page")
+  public void theSELOperatorIsInCCUIFindCasePage() throws Exception {
+    context.surveyUpdatePayload = ExampleData.createSurveyUpdate();
+    context.collectionExercise = ExampleData.createCollectionExercise();
+    context.caseCreatedPayload = ExampleData.createCaseUpdate(context.caseKey);
+    sendInboundEvents();
+    assertTrue(db.caseExists(context.caseKey));
+    var st = pages.getStartPage();
+    verifyCorrectOnsLogoUsed(st.getOnsLogo());
+
+    st.clickSelLink();
+    var sel = new SurveyEnquiryLine(driver);
+
+    sel.clickFindCaseByPostcodeLink();
+  }
+
+  @And("The user selects the \"Find Case via postcode\" option")
+  public void theUserSelectsThe() {
+    var st = pages.getStartPage();
+    verifyCorrectOnsLogoUsed(st.getOnsLogo());
+
+    st.clickSelLink();
+    var sel = new SurveyEnquiryLine(driver);
+
+    sel.clickFindCaseByPostcodeLink();
+  }
+
+  @When("The user is presented with callers postcode search option page")
+  public void theUserIsPresentedWithCallersPostcodeSearchOptionPage() {
+    var page = new SelPostcodeSearch(driver);
+    currentPage = "SelPostcodeSearch";
+    assertNotNull(page);
+  }
+
+  @Then("The user enters the callers postcode")
+  public void theUserEntersTheCallersPostcode() {
+    var page = new SelPostcodeSearch(driver);
+    page.inputPostcode("EX41EH");
+  }
+
+  @Then("The system displays a list of addresses for the postcode")
+  public void theSystemDisplaysAListOfAddressesForThePostcode() {
+    var page = new SelAddressSelection(driver);
+    currentPage = "SelAddressSelection";
+    assertEquals("43 addresses found for postcode EX4 1EH", page.getAddressList());
+  }
+
+  @And("The user selects the callers address from the list of address which is number {string}")
+  public void theUserSelectsTheCallersAddressFromTheListOfAddress(String addressNumber) {
+    var page = new SelAddressSelection(driver);
+    if (addressNumber.equals("6")) {
+      page.selectFourthOption();
+    } else if (addressNumber.equals("6A")) {
+      page.selectThirdOption();
+    }
+  }
+
+  @And("The user clicks \"Continue\"")
+  public void theUserClicksContinue() {
+    switch (currentPage) {
+      case "SelPostcodeSearch":
+        var page = new SelPostcodeSearch(driver);
+        page.clickContinueButton();
+        break;
+      case "SelAddressSelection":
+        var pageAdd = new SelAddressSelection(driver);
+        pageAdd.clickContinueButton();
+        break;
+      default:
+        throw new IllegalStateException(
+            String.format("Failed to find the “Conitnue“ button for page %s", currentPage));
+    }
+  }
+
+  @Then("The system displays the case details for the callers address")
+  public void theSystemDisplaysTheCaseDetailsForTheCallersAddress() {
+    var page = new AvailableCases(driver);
+    assertNotNull(page);
+  }
+
+  @Then("CCSvc returns no case for the selected address")
+  public void ccsvcReturnsNoCaseForTheSelectedAddress() {
+    var page = new NoCasesFound(driver);
+    assertNotNull(page);
+  }
+
+  @And("The user is presented with a no cases message")
+  public void theUserIsPresentedWithANoCasesMessage() {
+    var page = new NoCasesFound(driver);
+    assertEquals(caseNotFoundErrorMsg, page.getNoCaseFoundMsg());
+  }
+
+  @And("The user selects \"I cannot find the caller's address\" from the list")
+  public void theUserSelectsFromTheList() {
+    var page = new SelAddressSelection(driver);
+    page.selectCannotFindAddress();
+  }
+
+  @And("The user is presented with a address not found message for postcode {string}")
+  public void theUserIsPresentedWithAAddressNotFoundMessage(String postCode) {
+    var page = new AddressNotFound(driver);
+    String expectedMessage = String.format(addressNotFound, postCode);
+    assertEquals(expectedMessage, page.getNoAddressFoundMsg());
   }
 }
