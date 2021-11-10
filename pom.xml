@@ -151,6 +151,12 @@
       <artifactId>test-framework</artifactId>
       <version>${project.parent.version}</version>
     </dependency>
+
+    <dependency>
+      <groupId>ons.sdc.int.common</groupId>
+      <artifactId>util-framework</artifactId>
+      <version>${project.parent.version}</version>
+    </dependency>
     <!-- ONS dependencies end -->
 
   </dependencies>
