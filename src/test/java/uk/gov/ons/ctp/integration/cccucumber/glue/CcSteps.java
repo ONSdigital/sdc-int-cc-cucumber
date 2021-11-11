@@ -78,7 +78,7 @@ public class CcSteps extends StepsBase {
   }
 
   @And("The user selects the \"Find Case via postcode\" option")
-  public void theUserSelectsThe() {
+  public void theUserSelectsTheFindCaseViaPostcodeOption() {
     var st = pages.getStartPage();
     verifyCorrectOnsLogoUsed(st.getOnsLogo());
 
@@ -108,8 +108,9 @@ public class CcSteps extends StepsBase {
     assertEquals("43 addresses found for postcode EX4 1EH", page.getAddressList());
   }
 
-  @And("The user selects the callers address from the list of address which is number {string}")
-  public void theUserSelectsTheCallersAddressFromTheListOfAddress(String addressNumber) {
+  @And("The user selects the callers address from the list of addresses which is number {string}")
+  public void theUserSelectsTheCallersAddressFromTheListOfAddressesWhichIsNumber(
+      String addressNumber) {
     var page = new SelAddressSelection(driver);
     if (addressNumber.equals("6")) {
       page.selectFourthOption();
@@ -154,13 +155,13 @@ public class CcSteps extends StepsBase {
   }
 
   @And("The user selects \"I cannot find the caller's address\" from the list")
-  public void theUserSelectsFromTheList() {
+  public void theUserSelectsICannotFindTheCallersAddressFromTheList() {
     var page = new SelAddressSelection(driver);
     page.selectCannotFindAddress();
   }
 
   @And("The user is presented with a address not found message for postcode {string}")
-  public void theUserIsPresentedWithAAddressNotFoundMessage(String postCode) {
+  public void theUserIsPresentedWithAAddressNotFoundMessageForPostcode(String postCode) {
     var page = new AddressNotFound(driver);
     String expectedMessage = String.format(addressNotFound, postCode);
     assertEquals(expectedMessage, page.getNoAddressFoundMsg());

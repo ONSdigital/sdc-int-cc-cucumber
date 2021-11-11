@@ -8,7 +8,7 @@ Feature:  Survey Enquiry Line
     Then The user enters the callers postcode
     And The user clicks "Continue"
     Then The system displays a list of addresses for the postcode
-    And The user selects the callers address from the list of address which is number "6"
+    And The user selects the callers address from the list of addresses which is number "6"
     Then The user clicks "Continue"
     Then The system displays the case details for the callers address
 
@@ -20,7 +20,7 @@ Feature:  Survey Enquiry Line
     Then The user enters the callers postcode
     And The user clicks "Continue"
     Then The system displays a list of addresses for the postcode
-    And The user selects the callers address from the list of address which is number "6A"
+    And The user selects the callers address from the list of addresses which is number "6A"
     Then The user clicks "Continue"
     Then CCSvc returns no case for the selected address
     And The user is presented with a no cases message
