@@ -33,6 +33,12 @@ public final class PageXpath {
     public static final String FIND_CASE_BY_ADDR_SEARCH_LINK_TEXT =
         "//a[text()='Find case via address text search']";
     public static final String POSTCODE_INPUT = "//main//input[@id='postcode']";
+    public static final String RADIO_THIRD_ADDR = "(//form//fieldset//input)[3]";
     public static final String RADIO_FOURTH_ADDR = "(//form//fieldset//input)[4]";
+    public static final String RADIO_CANNOT_FIND_ADDR = "(//form//fieldset//input)[36]";
+    public static final String ADDRESS_LIST = "//main//span";
+    public static final String NO_ADDRESS_FIRST_PART_FOUND_MSG = "//main//p";
+    public static final String NO_ADDRESS_SECOND_PART_FOUND_MSG = "//main//p[2] ";
+    public static final String NO_CASE_FOUND_MSG = "//main//p";
   }
 }

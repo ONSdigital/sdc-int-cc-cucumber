@@ -16,7 +16,7 @@ public class ExampleData {
   public static final UUID DEFAULT_COLLEX_ID =
       UUID.fromString("1f1e7466-35b0-11ec-b103-4c3275913db5");
   public static final UUID DEFAULT_CASE_ID =
-      UUID.fromString("c45de4dc-3c3b-11e9-b210-d663bd873d13");
+      UUID.fromString("89e9d998-430c-11ec-a825-4c3275913db5");
   public static final String VALID_MOBILE_NO = "07700 900345";
 
   // --- model fixtures below ...

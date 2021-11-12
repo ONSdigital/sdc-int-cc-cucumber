@@ -10,8 +10,14 @@ import uk.gov.ons.ctp.integration.cccucumber.selenium.pages.PageXpath;
 @Getter
 public class SelAddressSelection extends PageObjectBase {
 
+  @FindBy(xpath = PageXpath.Sel.RADIO_THIRD_ADDR)
+  private WebElement thirdOption;
+
   @FindBy(xpath = PageXpath.Sel.RADIO_FOURTH_ADDR)
   private WebElement fourthOption;
+
+  @FindBy(xpath = PageXpath.Sel.RADIO_CANNOT_FIND_ADDR)
+  private WebElement cannotFindAddressOption;
 
   @FindBy(xpath = PageXpath.General.CONTINUE_BUTTON)
   private WebElement continueButton;
@@ -20,9 +26,19 @@ public class SelAddressSelection extends PageObjectBase {
     super(PageId.SEL_ADDR_SELECTION, driver);
   }
 
+  public void selectThirdOption() {
+    waitForElement(thirdOption, "thirdOption");
+    thirdOption.click();
+  }
+
   public void selectFourthOption() {
     waitForElement(fourthOption, "fourthOption");
     fourthOption.click();
+  }
+
+  public void selectCannotFindAddress() {
+    waitForElement(cannotFindAddressOption, "cannotFindAddressOption");
+    cannotFindAddressOption.click();
   }
 
   public void clickContinueButton() {
