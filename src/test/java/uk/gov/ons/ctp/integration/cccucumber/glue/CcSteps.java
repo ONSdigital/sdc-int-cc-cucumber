@@ -28,7 +28,6 @@ public class CcSteps extends StepsBase {
   @Before("@Setup")
   public void setup() throws Exception {
     super.setupForAll();
-    initialAddressSearchSetup();
   }
 
   @After("@TearDown")
@@ -37,7 +36,26 @@ public class CcSteps extends StepsBase {
     super.destroyPubSub();
   }
 
-  @Given("The user selects the callers address from the list of addresses which is number {string}")
+  @Given("The SEL operator finds a case by postcode and a list of addresses is displayed")
+  public void theSELOperatorFindsACaseByPostcodeAndAListOfAddressesIsDisplayed() throws Exception {
+    context.surveyUpdatePayload = ExampleData.createSurveyUpdate();
+    context.collectionExercise = ExampleData.createCollectionExercise();
+    context.caseCreatedPayload = ExampleData.createCaseUpdate(context.caseKey);
+    sendInboundEvents();
+    var st = pages.getStartPage();
+    verifyCorrectOnsLogoUsed(st.getOnsLogo());
+
+    st.clickSelLink();
+    var sel = new SurveyEnquiryLine(driver);
+
+    sel.clickFindCaseByPostcodeLink();
+
+    var newPage = new SelPostcodeSearch(driver);
+    newPage.inputPostcode("EX41EH");
+    newPage.clickContinueButton();
+  }
+
+  @When("The user selects the callers address from the list of addresses which is number {string}")
   public void theUserSelectsTheCallersAddressFromTheListOfAddressesWhichIsNumber(
       String addressNumber) {
     var page = new SelAddressSelection(driver);
@@ -48,7 +66,7 @@ public class CcSteps extends StepsBase {
     }
   }
 
-  @When("The user clicks \"Continue\"")
+  @And("The user clicks \"Continue\"")
   public void theUserClicksContinue() {
     var pageAdd = new SelAddressSelection(driver);
     pageAdd.clickContinueButton();
@@ -69,10 +87,10 @@ public class CcSteps extends StepsBase {
   @And("The user is presented with a no cases message")
   public void theUserIsPresentedWithANoCasesMessage() {
     var page = new NoCasesFound(driver);
-    assertEquals(NoCasesFound.caseNotFoundErrorMsg, page.getNoCaseFoundMsg());
+    assertEquals(NoCasesFound.ERROR_MSG, page.getNoCaseFoundMsg());
   }
 
-  @Given("The user selects \"I cannot find the caller's address\" from the list")
+  @When("The user selects \"I cannot find the caller's address\" from the list")
   public void theUserSelectsICannotFindTheCallersAddressFromTheList() {
     var page = new SelAddressSelection(driver);
     page.selectCannotFindAddress();
@@ -81,26 +99,8 @@ public class CcSteps extends StepsBase {
   @Then("The user is presented with a address not found message for postcode {string}")
   public void theUserIsPresentedWithAAddressNotFoundMessageForPostcode(String postCode) {
     var page = new AddressNotFound(driver);
-    String addressError = String.format(AddressNotFound.addressNotFound, postCode);
+    String addressError = String.format(AddressNotFound.ERROR_MSG, postCode);
     assertEquals(addressError, page.getNoAddressFoundMsg());
-  }
-
-  private void initialAddressSearchSetup() throws Exception {
-    context.surveyUpdatePayload = ExampleData.createSurveyUpdate();
-    context.collectionExercise = ExampleData.createCollectionExercise();
-    context.caseCreatedPayload = ExampleData.createCaseUpdate(context.caseKey);
-    sendInboundEvents();
-    var st = pages.getStartPage();
-    verifyCorrectOnsLogoUsed(st.getOnsLogo());
-
-    st.clickSelLink();
-    var sel = new SurveyEnquiryLine(driver);
-
-    sel.clickFindCaseByPostcodeLink();
-
-    var newPage = new SelPostcodeSearch(driver);
-    newPage.inputPostcode("EX41EH");
-    newPage.clickContinueButton();
   }
 
   private void sendInboundEvents() throws Exception {

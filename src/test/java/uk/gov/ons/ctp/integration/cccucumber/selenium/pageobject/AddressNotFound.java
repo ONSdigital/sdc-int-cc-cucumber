@@ -10,7 +10,7 @@ import uk.gov.ons.ctp.integration.cccucumber.selenium.pages.PageXpath;
 @Getter
 public class AddressNotFound extends PageObjectBase {
 
-  public static final String addressNotFound =
+  public static final String ERROR_MSG =
       "Confirm that the postcode %s is correct. "
           + "If the postcode is incorrect, enter a corrected value, else use a different method to find the caller's case";
 

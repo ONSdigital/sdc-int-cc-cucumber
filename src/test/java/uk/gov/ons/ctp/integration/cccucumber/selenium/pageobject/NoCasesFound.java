@@ -10,7 +10,7 @@ import uk.gov.ons.ctp.integration.cccucumber.selenium.pages.PageXpath;
 @Getter
 public class NoCasesFound extends PageObjectBase {
 
-  public static final String caseNotFoundErrorMsg =
+  public static final String ERROR_MSG =
       "Confirm this is the correct address, and that the it is the address "
           + "the caller was asked to complete the survey for";
 

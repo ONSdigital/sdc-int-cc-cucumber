@@ -10,19 +10,22 @@ Feature:  Survey Enquiry Line
 
   @SelPostcodeSearch_T6 @Setup @TearDown
   Scenario: SEL Postcode search - A case exists with users address
-    Given The user selects the callers address from the list of addresses which is number "6"
-    When The user clicks "Continue"
+    Given The SEL operator finds a case by postcode and a list of addresses is displayed
+    When The user selects the callers address from the list of addresses which is number "6"
+    And The user clicks "Continue"
     Then The system displays the case details for the callers address
 
   @SelPostcodeSearch_T8 @Setup @TearDown
   Scenario: SEL Postcode search - A case does not exist with users address
-    Given The user selects the callers address from the list of addresses which is number "6A"
-    When The user clicks "Continue"
+    Given The SEL operator finds a case by postcode and a list of addresses is displayed
+    When The user selects the callers address from the list of addresses which is number "6A"
+    And  The user clicks "Continue"
     Then CCSvc returns no case for the selected address
     And The user is presented with a no cases message
 
   @SelPostcodeSearch_T9 @Setup @TearDown
   Scenario: SEL Postcode search - Cannot find address for postcode
-    Given The user selects "I cannot find the caller's address" from the list
-    When The user clicks "Continue"
+    Given The SEL operator finds a case by postcode and a list of addresses is displayed
+    When The user selects "I cannot find the caller's address" from the list
+    And The user clicks "Continue"
     Then The user is presented with a address not found message for postcode "EX4 1EH"
