@@ -22,9 +22,6 @@ public class SelAddressSelection extends PageObjectBase {
   @FindBy(xpath = PageXpath.General.CONTINUE_BUTTON)
   private WebElement continueButton;
 
-  @FindBy(xpath = PageXpath.Sel.ADDRESS_LIST)
-  private WebElement addressList;
-
   public SelAddressSelection(WebDriver driver) {
     super(PageId.SEL_ADDR_SELECTION, driver);
   }
@@ -47,10 +44,5 @@ public class SelAddressSelection extends PageObjectBase {
   public void clickContinueButton() {
     waitForElement(continueButton, "continueButton");
     continueButton.click();
-  }
-
-  public String getAddressList() {
-    waitForElement(addressList, "addressList");
-    return addressList.getText();
   }
 }

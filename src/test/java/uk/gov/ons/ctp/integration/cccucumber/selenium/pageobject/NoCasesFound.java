@@ -10,6 +10,10 @@ import uk.gov.ons.ctp.integration.cccucumber.selenium.pages.PageXpath;
 @Getter
 public class NoCasesFound extends PageObjectBase {
 
+  public static final String caseNotFoundErrorMsg =
+      "Confirm this is the correct address, and that the it is the address "
+          + "the caller was asked to complete the survey for";
+
   @FindBy(xpath = PageXpath.Sel.NO_CASE_FOUND_MSG)
   private WebElement noCaseFoundMsg;
 
