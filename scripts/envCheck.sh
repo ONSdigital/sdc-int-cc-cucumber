@@ -11,7 +11,7 @@ mock_services_port="8162"
 pubsub_emulator_port="9808"
 redis_port="6379"
 cc_service_port="8171"
-ccui_port="5000"
+ccui_port="5001"
 
 error_found=0
 
