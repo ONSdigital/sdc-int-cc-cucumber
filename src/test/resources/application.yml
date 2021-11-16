@@ -19,7 +19,7 @@ logging:
     '[org.openqa.selenium.remote.ProtocolHandshake]': WARN
 
 ccui:
-  baseurl: http://localhost:5000/
+  baseurl: http://localhost:5001/
   
 webdriver:
   type: FIREFOX
