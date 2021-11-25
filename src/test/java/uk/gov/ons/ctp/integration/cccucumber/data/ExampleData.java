@@ -38,7 +38,7 @@ public class ExampleData {
 
     sample.setQuestionnaire("12345");
     sample.setSampleUnitRef("REF-4321");
-    sample.setCohort(23);
+    sample.setCohort("CC3");
     return sample;
   }
 
@@ -63,7 +63,7 @@ public class ExampleData {
     cc.setCaseId(id.toString());
     cc.setSurveyId(DEFAULT_SURVEY_ID.toString());
     cc.setCollectionExerciseId(DEFAULT_COLLEX_ID.toString());
-    cc.setCaseRef("10000000017");
+    cc.setCaseRef("10000000892");
     cc.setRefusalReceived(null);
     cc.setInvalid(false);
     cc.setSample(sample);
