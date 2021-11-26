@@ -1,16 +1,15 @@
 package uk.gov.ons.ctp.integration.cccucumber.glue;
 
 import static io.cucumber.spring.CucumberTestContext.SCOPE_CUCUMBER_GLUE;
-
 import java.util.UUID;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import uk.gov.ons.ctp.common.event.model.CaseUpdate;
 import uk.gov.ons.ctp.common.event.model.CollectionExercise;
+import uk.gov.ons.ctp.common.event.model.EqLaunchEvent;
 import uk.gov.ons.ctp.common.event.model.Header;
-import uk.gov.ons.ctp.common.event.model.SurveyLaunchEvent;
 import uk.gov.ons.ctp.common.event.model.SurveyUpdate;
 import uk.gov.ons.ctp.integration.cccucumber.data.ExampleData;
 
@@ -26,5 +25,5 @@ public class GlueContext {
   CollectionExercise collectionExercise;
   String fulfilmentRequestedCode;
   Header respondentAuthenticatedHeader;
-  SurveyLaunchEvent surveyLaunchedEvent;
+  EqLaunchEvent eqLaunchedEvent;
 }
