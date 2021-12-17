@@ -2,10 +2,10 @@ package uk.gov.ons.ctp.integration.cccucumber.data;
 
 import java.time.Instant;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 import uk.gov.ons.ctp.common.event.model.CaseUpdate;
-import uk.gov.ons.ctp.common.event.model.CaseUpdateSample;
-import uk.gov.ons.ctp.common.event.model.CaseUpdateSampleSensitive;
 import uk.gov.ons.ctp.common.event.model.CollectionExercise;
 import uk.gov.ons.ctp.common.event.model.CollectionExerciseMetadata;
 import uk.gov.ons.ctp.common.event.model.SurveyUpdate;
@@ -21,30 +21,30 @@ public class ExampleData {
 
   // --- model fixtures below ...
 
-  public static CaseUpdateSample createSample() {
-    CaseUpdateSample sample = new CaseUpdateSample();
-    sample.setAddressLine1("6B Okehampton Road");
-    sample.setAddressLine2("");
-    sample.setAddressLine3("");
-    sample.setTownName("Exeter");
-    sample.setPostcode("EX4 1EH");
-    sample.setRegion("E");
-    sample.setUprn("100040226402");
+  public static Map<String, String> createSample() {
+    Map<String, String> sample = new HashMap<>();
+    sample.put(CaseUpdate.ATTRIBUTE_ADDRESS_LINE_1, "6B Okehampton Road");
+    sample.put(CaseUpdate.ATTRIBUTE_ADDRESS_LINE_2, "");
+    sample.put(CaseUpdate.ATTRIBUTE_ADDRESS_LINE_3, "");
+    sample.put(CaseUpdate.ATTRIBUTE_TOWN_NAME, "Exeter");
+    sample.put(CaseUpdate.ATTRIBUTE_POSTCODE, "EX4 1EH");
+    sample.put(CaseUpdate.ATTRIBUTE_REGION, "E");
+    sample.put(CaseUpdate.ATTRIBUTE_UPRN, "100040226402");
 
-    sample.setGor9d("E12000009");
-    sample.setLaCode("EX");
-    sample.setUprnLatitude("50.72116");
-    sample.setUprnLongitude("-3.53363");
+    sample.put(CaseUpdate.ATTRIBUTE_GOR9D, "E12000009");
+    sample.put(CaseUpdate.ATTRIBUTE_LA_CODE, "EX");
+    sample.put(CaseUpdate.ATTRIBUTE_UPRN_LATITUDE, "50.72116");
+    sample.put(CaseUpdate.ATTRIBUTE_UPRN_LONGITUDE, "-3.53363");
 
-    sample.setQuestionnaire("12345");
-    sample.setSampleUnitRef("REF-4321");
-    sample.setCohort("CC3");
+    sample.put(CaseUpdate.ATTRIBUTE_QUESTIONNAIRE, "12345");
+    sample.put(CaseUpdate.ATTRIBUTE_SAMPLE_UNIT_REF, "REF-4321");
+    sample.put(CaseUpdate.ATTRIBUTE_COHORT, "CC3");
     return sample;
   }
 
-  public static CaseUpdateSampleSensitive createSampleSensitive() {
-    CaseUpdateSampleSensitive sampleSensitive = new CaseUpdateSampleSensitive();
-    sampleSensitive.setPhoneNumber(VALID_MOBILE_NO);
+  public static Map<String, String> createSampleSensitive() {
+    Map<String, String> sampleSensitive = new HashMap<>();
+    sampleSensitive.put("phoneNumber", VALID_MOBILE_NO);
     return sampleSensitive;
   }
 
@@ -58,7 +58,7 @@ public class ExampleData {
   }
 
   public static CaseUpdate createCaseUpdate(
-      CaseUpdateSample sample, CaseUpdateSampleSensitive sampleSensitive, UUID id) {
+      Map<String, String> sample, Map<String, String> sampleSensitive, UUID id) {
     CaseUpdate cc = new CaseUpdate();
     cc.setCaseId(id.toString());
     cc.setSurveyId(DEFAULT_SURVEY_ID.toString());
@@ -74,8 +74,8 @@ public class ExampleData {
   }
 
   public static CaseUpdate createCaseUpdate(UUID id) {
-    CaseUpdateSample sample = createSample();
-    CaseUpdateSampleSensitive sampleSensitive = createSampleSensitive();
+    Map<String, String> sample = createSample();
+    Map<String, String> sampleSensitive = createSampleSensitive();
     return createCaseUpdate(sample, sampleSensitive, id);
   }
 
@@ -98,7 +98,7 @@ public class ExampleData {
             + "          }\n"
             + "        ]\n"
             + "      }]");
-    surveyUpdate.setMetadata("{\n" + "        \"ex_e4\": true\n" + "      }");
+    surveyUpdate.setMetadata(Map.of("ex_e4", "true"));
     return surveyUpdate;
   }
 
