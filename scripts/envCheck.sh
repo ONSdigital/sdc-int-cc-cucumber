@@ -42,7 +42,7 @@ function verify_redis_running {
 
   result=$(echo PING | nc $redis_host $redis_port | tr -d '\r\n')
   
-  if [ $result != "+PONG" ]
+  if [[ "$result" != "+PONG" ]]
   then 
     echo "Redis          : NOT RUNNING  Response=$result  Expected:+PONG"
     error_found=1
